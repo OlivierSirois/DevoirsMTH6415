@@ -1,0 +1,76 @@
+\documentclass[oneside]{book}
+\usepackage[utf8]{inputenc}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{color}
+\usepackage{multicol}
+\usepackage{ragged2e}
+\usepackage{listings}
+\usepackage{pdfpages}
+\title{Notes de Cours MTH 6415}
+\date{2018-01-01}
+\author{Olivier Sirois}
+\setlength\parindent{0pt}
+\makeindex
+\pagenumbering{arabic}
+\begin{document}
+\setcounter{page}{1}
+\maketitle
+\section*{4.19 (3.19 ed. 4)}
+\subsection*{a)}
+Comme montrer dans l'énoncé de b). Une décision optimale est prise si on trouve un stationnement lorsqu'il nous reste seulement $k*$ essaies restants. Sachant cela, on peut traduire cette information sous forme:\\
+
+
+\begin{math}
+min E \{ J_k(x_k) \} = 
+\begin{cases}
+p*k + (1-p)*E\{J_{k-1}(x_{k-1})\}, & \text{si } E > k*\\
+E\{J_{k-1}(x_{k-1})\}, & \text{si } E < k*
+\end{cases}
+\end{math}\\
+
+
+qui peut être représenté comme étant:\\
+
+\begin{math}
+min E \{ J_k(x_k) \} = 
+\begin{cases}
+p*k + (1-p)*E\{J_{k-1}(x_{k-1})\}, & \text{si } E > k*\\
+p*E\{J_{k-1}(x_{k-1})\} + (1-p)E\{J_{k-1}(x_{k-1})\}, & \text{si } E < k*
+\end{cases}
+\end{math}\\
+
+Étant donnée que $p + (1-p) = 1$. En agrégeant ces deux cas, il est correct de dire:\\
+
+$min E \{ J_k(x_k) \} = p*min(k,E\{J_{k-1}(x_{k-1}\}) + (1-p)*E\{J_{k-1}(x_{k-1}\}$\\
+
+en définissant $minE\{J_k(x_k)\} = F_k$,comme mentionné dans l'énoncé, on revient à l'équation originale, soit:\\
+
+$F_k = p*min(k, F_{k-1}) + (1-p)*F_{k-1}, q = (1-p)$.
+
+\subsection*{b)}
+
+\section*{4.16 (3.16 de l'ed. 4)}
+Pour ce problème, on peut se fier à l'example 3.4.1 (ed. 4) du livre de Bertsekas pour commencer. Évidemment, il y a certaines différences. On peut commencer par définir l'état de notre problème:\\
+
+$x_{k+1} = max(x_k, w_k)$\\
+
+Étant donné que nous conservons toutes les offres, On peut dire que l'état serait la meilleur offre que nous avons eu jusqu'à présent. ou $x_k$ est l'offre et que $w_k$ est la prochaine offre que nous recevront. Si l'offre recu est meilleur, elle prendra la place de $x_k$, sinon $x_k$ restera.\\
+
+On peut charactérisé les équations de programmation dynamique comme étant:\\
+
+$V_N(x_N) = x_N)$\\
+
+et:\\
+
+$V_k(x_k) = max[x_k ,E[V_{k+1}(max(x_k,\omega_k)] - c*(N-k) ]$\\
+
+Étant donnée qu'on conserve toutes les offres déjà eu auparavant, on peut assumer que l'ensemble $T$ est absorbant. l'offre effective ne peut pas diminuer, alors selon le 'one step lookahed stopping rule', il s'ensuit que la première offre qui est égale ou excède $\bar{\alpha}$ est optimale. Il est ensuite logique d'assumer que:\\
+
+$\alpha_k = E\{max(x_{k+1},\omega_{k+1})\} - c*(N-k)$\\
+
+ou la limite asymptotique de $\alpha_k$ qui peut être défini comme étant:\\
+
+$\bar{\alpha} = P(\bar{\alpha})\bar{\alpha} + \int\limits_{\bar{\alpha}}^{\infty}\omega dP(\omega)$
+\end{document}
