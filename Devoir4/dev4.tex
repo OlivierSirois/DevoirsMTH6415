@@ -43,14 +43,49 @@ p*E\{J_{k-1}(x_{k-1})\} + (1-p)E\{J_{k-1}(x_{k-1})\}, & \text{si } E < k*
 
 Étant donnée que $p + (1-p) = 1$. En agrégeant ces deux cas, il est correct de dire:\\
 
-$min E \{ J_k(x_k) \} = p*min(k,E\{J_{k-1}(x_{k-1}\}) + (1-p)*E\{J_{k-1}(x_{k-1}\}$\\
+$min E \{ J_k(x_k) \} = p*min(k,E\{J_{k-1}(x_{k-1}\}) + (1-p)*E\{J_{k-1}(x_{k-1})\}$\\
 
 en définissant $minE\{J_k(x_k)\} = F_k$,comme mentionné dans l'énoncé, on revient à l'équation originale, soit:\\
 
 $F_k = p*min(k, F_{k-1}) + (1-p)*F_{k-1}, q = (1-p)$.
 
 \subsection*{b)}
+Pour cette question, on nous demande de confirmer l'optimalité de la politique expliqué dans l'énoncé. Comme nous l'avons vu dans la question a), la fonction J utilise le minimum entre k et $F_k$. Si on réussi à prouver qu'il y a seulement un point d'intersection entre k et $F_k$, on est capable d'un déduire que la politique aura la forme décrite dans l'énoncé. \\
 
+en utilisant les définitions de la question précédent et en commençant avec $F_0 = C$, on peut dire:\\
+
+\begin{align*}
+F_1(1) = p*min(1, C) + q*C\\
+F_2(2) = p*min(2, C) + q*F_1(1) = p*min(2,C) + q*p*min(1,C) + q^2*C\\
+F_3(3) = p*min(3, C) + q*F_2(2) = p*min(3,C) + q*p*min(2,C) + q^2*p*min(1,C) + q^3*C\\
+\end{align*}
+de forme plus générale :\\
+
+
+\begin{math}
+F_k(k) =  
+\begin{cases}
+q^kC + \sum\limits_{i=1}^{k}iq^{k-i}p, & \text{si } k < C\\
+q^kC + \sum\limits_{i=1}^{C}iq^{k-i}p + \sum\limits_{i=C}^{k}Cq^{k-i}p, & \text{si }k > C\\
+\end{cases}
+\end{math}\\
+
+on peut alors traduire cette forme en différence:\\
+
+\begin{align*}
+F_{k} - F_{k-1} = q^kC - q^{k-1}C + kp 
+\end{align*}\\
+
+alors:\\
+
+\begin{align*}
+F_0 = C\\
+F_1 = F_0 + q^1C - q^0C + p\\
+F_2 = F_1 + q^2C - q^1C + 2p...\\
+F_i = F_{i-1} + q^{i-1}C(q-1) + ip
+\end{align*}
+
+En plaçant notre équivalence dans la dernière équation, on peut voir que si un i satisfait à $q^{i-1} < (pC+q)^{-1}$, la partie de droite ($q^{i-1}C(q-1) + ip$) est strictement décroissant dans le sens i (k). Notre seuil de décision est la valeur du cout de stationnement ($k$) qui est évidemment strictement croissant dans le sens de k. ce qui nous guarantit un seul point d'intersection qui correspond au seul seuil de décision sur lequel on va commencer à se stationner.
 \section*{4.16 (3.16 de l'ed. 4)}
 Pour ce problème, on peut se fier à l'example 3.4.1 (ed. 4) du livre de Bertsekas pour commencer. Évidemment, il y a certaines différences. On peut commencer par définir l'état de notre problème:\\
 
@@ -60,15 +95,15 @@ $x_{k+1} = max(x_k, w_k)$\\
 
 On peut charactérisé les équations de programmation dynamique comme étant:\\
 
-$V_N(x_N) = x_N)$\\
+$V_N(x_N) = x_N$\\
 
 et:\\
 
-$V_k(x_k) = max[x_k ,E[V_{k+1}(max(x_k,E[\omega_k)]] - c*(N-k) ]$\\
+$V_k(x_k) = max[x_k ,E[V_{k+1}(max(x_k,E[\omega_k])] - c*(N-k) ]$\\
 
 Étant donnée qu'on conserve toutes les offres déjà eu auparavant, on peut assumer que l'ensemble $T$ est absorbant. l'offre effective ne peut pas diminuer, alors selon le 'one step lookahed stopping rule', il s'ensuit que la première offre qui est égale ou excède $\bar{\alpha}$ est optimale. Il est ensuite logique d'assumer que:\\
 
-$\alpha_k = E\{max(x_{k+1},\omega_{k+1})\} - c*(N-k)$\\
+$\alpha_k = E\{max(x_{k+1},E[\omega_{k+1}])\} - c*(N-k)$\\
 
 ou la limite asymptotique de $\alpha_k$ qui peut être défini comme étant:\\
 
