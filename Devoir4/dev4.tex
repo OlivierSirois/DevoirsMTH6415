@@ -8,9 +8,9 @@
 \usepackage{ragged2e}
 \usepackage{listings}
 \usepackage{pdfpages}
-\title{Devoir 4 MTH 6415}
-\date{2018-01-01}
-\author{Olivier Sirois 1626107, Corey Ducharme}
+\title{Devoir 4 \\ MTH 6415}
+\date{2018-03-28}
+\author{Olivier Sirois - 1626107 \\ Corey Ducharme - 1626614}
 \setlength\parindent{0pt}
 \makeindex
 \pagenumbering{arabic}
@@ -19,45 +19,73 @@
 \maketitle
 \section*{4.19 (3.19 ed. 4)}
 \subsection*{a)}
-Comme montrer dans l'énoncé de b). Une décision optimale est prise si on trouve un stationnement lorsqu'il nous reste seulement $k*$ essaies restants. Sachant cela, on peut traduire cette information sous forme:\\
+Dans ce problème, nous avons à chaque étape k deux décision possible se stationner avec une probabilité p ou réessayer plus tard à l'étape k-1. 
+Comme montrer dans l'énoncé de b). Une décision optimale est prise si on trouve un stationnement lorsqu'il nous reste seulement $k*$ essaies restants. Nous povons modéliser ce problème sous la forme des équations de Bellmann. Soit $J_k$ le coût à l'étape k :\\
 
 
 \begin{math}
-min E \{ J_k(x_k) \} = 
+ J_k(x_k) = 
 \begin{cases}
-p*k + (1-p)*E\{J_{k-1}(x_{k-1})\}, & \text{si } E > k*\\
-E\{J_{k-1}(x_{k-1})\}, & \text{si } E < k*
+p*k + (1-p)*J_{k-1}(x_{k-1}), & \text{si on essaie de se stationner} \\
+J_{k-1}(x_{k-1}), & \text{sinon}
 \end{cases}
 \end{math}\\
 
+%\begin{math}
+%min E \{ J_k(x_k) \} = 
+%\begin{cases}
+%p*k + (1-p)*E\{J_{k-1}(x_{k-1})\}, & \text{si } E > k*\\
+%E\{J_{k-1}(x_{k-1})\}, & \text{si } E < k*
+%\end{cases}
+%\end{math}\\
 
-qui peut être représenté comme étant:\\
+Qui est équivalent à :\\
 
 \begin{math}
-min E \{ J_k(x_k) \} = 
+J_k(x_k) = 
 \begin{cases}
-p*k + (1-p)*E\{J_{k-1}(x_{k-1})\}, & \text{si } E > k*\\
-p*E\{J_{k-1}(x_{k-1})\} + (1-p)E\{J_{k-1}(x_{k-1})\}, & \text{si } E < k*
+pk + (1-p)J_{k-1}(x_{k-1}), & \text{si on essaie de se stationner} \\
+pJ_{k-1}(x_{k-1}) + (1-p)J_{k-1}(x_{k-1}), & \text{sinon }
 \end{cases}
 \end{math}\\
 
-Étant donnée que $p + (1-p) = 1$. En agrégeant ces deux cas, il est correct de dire:\\
+puisque $p + (1-p) = 1$.
+\\\\
+Posons maintenant $F_k = E\{J_k(x_k)\}$ qui est le coût minimal espéré si on est à k place de stationnement de notre destination. 
 
-$min E \{ J_k(x_k) \} = p*min(k,E\{J_{k-1}(x_{k-1}\}) + (1-p)*E\{J_{k-1}(x_{k-1})\}$\\
+\begin{math}
+\min E \{ J_k(x_k) \} = 
+\min\begin{cases}
+pk + (1-p)E\{J_{k-1}(x_{k-1})\}, \\
+pE\{J_{k-1}(x_{k-1})\} + (1-p)E\{J_{k-1}(x_{k-1})\},
+\end{cases}
+\end{math}
+\\
 
-en définissant $minE\{J_k(x_k)\} = F_k$,comme mentionné dans l'énoncé, on revient à l'équation originale, soit:\\
-
-$F_k = p*min(k, F_{k-1}) + (1-p)*F_{k-1}, q = (1-p)$.
-
-\subsection*{b)}
-Pour cette question, on nous demande de confirmer l'optimalité de la politique expliqué dans l'énoncé. Comme nous l'avons vu dans la question a), la fonction J utilise le minimum entre k et $F_k$. Si on réussi à prouver qu'il y a seulement un point d'intersection entre k et $F_k$, on est capable d'un déduire que la politique aura la forme décrite dans l'énoncé. \\
-
-en utilisant les définitions de la question précédent et en commençant avec $F_0 = C$, on peut dire:\\
+En mettant les termes en commun et en remplaçant avec $F_k$, on trouve:
 
 \begin{align*}
-F_1(1) = p*min(1, C) + q*C\\
-F_2(2) = p*min(2, C) + q*F_1(1) = p*min(2,C) + q*p*min(1,C) + q^2*C\\
-F_3(3) = p*min(3, C) + q*F_2(2) = p*min(3,C) + q*p*min(2,C) + q^2*p*min(1,C) + q^3*C\\
+\min E \{ J_k(x_k) \} &= p\min(k,E \{J_{k-1}(x_{k-1}\}) + (1-p)*E \{J_{k-1}(x_{k-1})\} \\
+F_k &= p\min(k, F_{k-1}) + (1-p)*F_{k-1}
+\end{align*}
+
+En définissant $q = (1-p)$, on retrouve l'équation demandée.
+
+\begin{align*}
+F_k = p\min(k, F_{k-1}) + qF_{k-1}
+\end{align*}
+
+
+
+\subsection*{b)}
+Pour cette question, on nous demande de confirmer l'optimalité de la politique expliqué dans l'énoncé. Comme nous l'avons vu dans la question a), la fonction $F_k$ utilise le minimum entre k et $F_{k-1}$. Si on réussi à prouver qu'il y a seulement un point d'intersection entre k et $F_{k-1}$, on est capable d'un déduire que la politique aura la forme décrite dans l'énoncé. \\
+
+En utilisant les définitions de la question précédent et en commençant avec $F_0 = C$, on peut dire:\\
+
+\begin{align*}
+F_1(1) &= p\min(1, C) + qC\\
+F_2(2) &= p\min(2, C) + qF_1(1) = p\min(2,C) + qp\min(1,C) + q^2C\\
+F_3(3) &= p\min(3, C) + qF_2(2) = p\min(3,C) + qp\min(2,C) + q^2p\min(1,C) + q^3C\\
 \end{align*}
 de forme plus générale :\\
 
@@ -70,43 +98,82 @@ q^kC + \sum\limits_{i=1}^{C}iq^{k-i}p + \sum\limits_{i=C}^{k}Cq^{k-i}p, & \text{
 \end{cases}
 \end{math}\\
 
-on peut alors traduire cette forme en différence:\\
+on peut alors traduire cette forme en différence:
 
 \begin{align*}
 F_{k} - F_{k-1} = q^kC - q^{k-1}C + kp 
-\end{align*}\\
+\end{align*}
 
-alors:\\
-
+Alors,
 \begin{align*}
-F_0 = C\\
-F_1 = F_0 + q^1C - q^0C + p\\
-F_2 = F_1 + q^2C - q^1C + 2p...\\
+F_0 &= C\\
+F_1 &= F_0 + q^1C - q^0C + p\\
+F_2 &= F_1 + q^2C - q^1C + 2p\\
+...
 \end{align*}
 Avec un peu de manipulation, on peut voir que pour tout i satisfaisant à l'équation de l'énoncé, $F_i - F_{i-1} < 1$. cela nous assure donc que nous aura seulement une intersection avec $k$ qui correspondera au seuil de la politique. Parallèlement, la valeur d'i ou l'équation dans l'énoncé ne tiendra plus ce qui vérifie l'énoncé.
 
 \section*{4.16 (3.16 de l'ed. 4)}
-Pour ce problème, on peut se fier à l'example 3.4.1 (ed. 4) du livre de Bertsekas pour commencer. Évidemment, il y a certaines différences. On peut commencer par définir l'état de notre problème:\\
+Pour ce problème, on peut suivre la démarche que nous avons faites dans le cours sur le problème de la vente d'un actif. Évidemment, il y a certaines différences. On peut commencer par définir les décisions possible à chaque étape. $u_k = 1$ si on vend et $\mu_k = 0$ si on ne vend pas. \\\\
+On définie maintenant la variable d'état $y_k$ de notre problème qui est la meilleur offre reçue. Étant donné que nous conservons toutes les offres, On peut prend le maximum entre l'offre et $y_{k-1}$ qui est le maximum de toutes les autres offres reçues.
 
-$x_{k+1} = max(x_k, w_k)$\\
+\begin{gather*}
+y_k = 
+\begin{cases}
+\max(y_{k-1}, \omega_k) & P = p_k\\
+y_{k-1} & P = (1-p_k)
+\end{cases}
+\end{gather*}
 
-Étant donné que nous conservons toutes les offres, On peut dire que l'état serait la meilleur offre que nous avons eu jusqu'à présent. ou $x_k$ est l'offre et que $w_k$ est la prochaine offre que nous recevront. Si l'offre recu est meilleur, elle prendra la place de $x_k$, sinon $x_k$ restera.\\
+On peut voir que nous avons deux variables aléatoire dans notre problème, pour ne pas tous les écrire à chaque fois, nous allons définir la variable $\Omega_k(\omega_k, p_k)$ qui est la vecteur aléatoire de notre problème.
 
-On peut charactérisé les équations de programmation dynamique comme étant:\\
+On défini maintenant la variable d'état $x_k$ de notre système à la période k+1.
 
-$V_N(x_N) = x_N$\\
+\begin{gather*}
+x_k+1 = 
+\begin{cases}
+y_k &\text{si  } \mu_0 = ... = \mu_k = 1 \\
+\Delta &\text{sinon}
+\end{cases}
+\end{gather*}
 
-et:\\
+Les décisions admissible à une étape k quelconque sont 
 
-$V_k(x_k) = max[x_k ,E[V_{k+1}(max(x_k,E[\omega_k])] - c*(N-k) ]$\\
+\begin{gather*}
+\begin{cases}
+\mu_k = 0 &\text{si  } x_k = \Delta \\
+\mu_k = \{0, 1\} &\text{sinon}
+\end{cases}
+\end{gather*}
 
-Étant donnée qu'on conserve toutes les offres déjà eu auparavant, on peut assumer que l'ensemble $T$ est absorbant. l'offre effective ne peut pas diminuer, alors selon le 'one step lookahed stopping rule', il s'ensuit que la première offre qui est égale ou excède $\bar{\alpha}$ est optimale. Il est ensuite logique d'assumer que:\\
+À chaque étape $k > 0$, on perd de l'argent sur la maintenance. Le profit à l'étape k est donc 
 
-$\alpha_k = E\{max(x_{k+1},E[\omega_{k+1}])\} - c*(N-k)$\\
+\begin{gather*}
+g(x_k, \mu_k, \Omega_k) =
+\begin{cases}
+x_k - kc &\text{si  } \mu_k = 1 \\
+0
+\end{cases}
+\end{gather*}
 
-ou la limite asymptotique de $\alpha_k$ qui peut être défini comme étant:\\
+Soit $J_k(x_k)$, le profit espéré optimal de l'étape k jusqu'à N. Son expression est 
 
-$\bar{\alpha} = P(\bar{\alpha})\bar{\alpha} + \int\limits_{\bar{\alpha}}^{\infty}\omega dP(\omega)$
+\begin{gather*}
+J_k(x_k) = 
+\begin{cases}
+0 &\text{si  } x_k = \Delta \\
+x_N &\text{si  } k = N \text{ et } x_N \neq \Delta \\
+\max\left(x_k - kc, E_{\Omega_k}\left[J_{k+1}(y_{k})\right]\right) &\text{sinon}
+\end{cases}
+\end{gather*}
+
+On peut remplacer la valeur de $x_{k+1}$ par $y_k$ dans la fonction $J_{k+1}$ puisque nous savons que nous n'allons pas vendre. On voie que notre maximum contient à gauche, la décision de vendre et à droite, la décision d'attendre.
+\\\\
+Ainsi, nous pouvons déterminer que la décision optimale, si on a encore le choix est de vendre si et seulement si 
+
+\begin{gather*}
+x_k = \alpha_k \equiv E_{\Omega_k}\left[J_{k+1}(y_{k})\right] + kc
+\end{gather*}
 
 
 \section*{1.14 (1.21 de l'ed. 4)}
