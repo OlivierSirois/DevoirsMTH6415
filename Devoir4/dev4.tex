@@ -82,10 +82,9 @@ alors:\\
 F_0 = C\\
 F_1 = F_0 + q^1C - q^0C + p\\
 F_2 = F_1 + q^2C - q^1C + 2p...\\
-F_i = F_{i-1} + q^{i-1}C(q-1) + ip
 \end{align*}
+Avec un peu de manipulation, on peut voir que pour tout i satisfaisant à l'équation de l'énoncé, $F_i - F_{i-1} < 1$. cela nous assure donc que nous aura seulement une intersection avec $k$ qui correspondera au seuil de la politique. Parallèlement, la valeur d'i ou l'équation dans l'énoncé ne tiendra plus ce qui vérifie l'énoncé.
 
-En plaçant notre équivalence dans la dernière équation, on peut voir que si un i satisfait à $q^{i-1} < (pC+q)^{-1}$, la partie de droite ($q^{i-1}C(q-1) + ip$) est strictement décroissant dans le sens i (k). Notre seuil de décision est la valeur du cout de stationnement ($k$) qui est évidemment strictement croissant dans le sens de k. ce qui nous guarantit un seul point d'intersection qui correspond au seul seuil de décision sur lequel on va commencer à se stationner.
 \section*{4.16 (3.16 de l'ed. 4)}
 Pour ce problème, on peut se fier à l'example 3.4.1 (ed. 4) du livre de Bertsekas pour commencer. Évidemment, il y a certaines différences. On peut commencer par définir l'état de notre problème:\\
 
@@ -108,4 +107,58 @@ $\alpha_k = E\{max(x_{k+1},E[\omega_{k+1}])\} - c*(N-k)$\\
 ou la limite asymptotique de $\alpha_k$ qui peut être défini comme étant:\\
 
 $\bar{\alpha} = P(\bar{\alpha})\bar{\alpha} + \int\limits_{\bar{\alpha}}^{\infty}\omega dP(\omega)$
+
+
+\section*{1.14 (1.21 de l'ed. 4)}
+Pour ce numéro on nous demande de vérifier l'optimalité des politiques décrites en a), b) et c). Nous allons premièrement commencer par généraliser le critère de sélection de $u$ pour chaque étape.\\
+
+étant donné que pour la prise de décision nous avons pas encore l'information pour chacune des valeurs $w$ étant donné sa stochasticité, nous allons généraliser $w_k = \bar{w},$   $ \forall k$
+
+\begin{align*}
+J_N(x_N) = x_N \rightarrow \text{aucune décision}\\
+J_{N-1}(x_{N-1}) = (1-u_{N-1})*x_{N-1} + J_N(x_{N-1} + x_{N-1}*\bar{w}*u_{N-1}) =\\
+J_{N-1}(x_{N-1}) = x_{N-1}(2 + u_{N-1}(\bar{w} - 1))\\
+J_{N-2}(x_{N-2}) = (1-u_{N-2})*x_{N-2} + (x_{N-2} + x_{N-2}*u_{N-2}*\bar{w})(2 + u_{N-1}(\bar{w}-1))... 
+\end{align*} 
+Comme vous pouvez le voir, la fonction J commence déjà à etre très grande. Par contre, nous pouvons analyser la prise de chaque décision à partir de $J_N$. Évidemment, aucune décision ne peut être prise à $J_N$ étant donné que c'est l'état final. Par contre, lorsqu'on remonte à $J_{N-1}$, on peut voir que sa dérivé donne tout simplement $(\bar{w} - 1)$.\\
+
+\subsection*{a)}
+Sachant que $\bar{w} > 1$, nous savons que la première décision est $u_{N-1} = 1$ vu que $(\bar{w} - 1)$ est strictement positif. Pour maximiser le terme nous allons donc utiliser $u_{N-1}$ jusqu'à sa limite positive qui est de 1.\\
+
+Évidemment, on ne peut pas confirmer que toute les étapes vont se comporter de cette manière. Cependant, nous pouvons fixer la valeur de $u_{N-1}$ à 1 et le transmettre ensuite dans le terme $J_{N-2}$. Cela nous donnera donc:\\
+
+\begin{align*}
+J_{N-1} = x_{N-1}(2 + (1)*(\bar{w} - 1)) = x_{N-1}(1 + \bar{w})\\
+J_{N-2} = (1 - u_{N-2})*x_{N-2} + (x_{N-2} + x_{N-2}*u_{N-2}*\bar{w})(1 + \bar{w}) = ...\\
+J_{N-2} = x_{N-2}(2 + \bar{w} + u_{N-2}(\bar{w} + \bar{w}^2 - 1))
+\end{align*}
+Encore une fois, le terme $(\bar{w} + \bar{w}^2 - 1)$ est strictement positif étant donné que $\bar{w} > 1$. En continuant jusqu'à k, on peut ainsi voir que le terme à l'intérieur du $u$ donne:\\
+
+\begin{align*}
+J_{N-k} = x_{N-k}(.... + \underline{u_{N-k}(\bar{w}*(\bar{w} + 1)^{k-1} -1)})
+\end{align*}
+qui est strictement croissant dans le cas de $\bar{w} > 1$, ce qui confirme donc que la décision sera $u_k = 1 ,\forall k$
+
+\subsection*{b)}
+Dans le cas de $0 < \bar{w} < \frac{1}{N}$, on peut voir dès le départ que la décision pour $J_{N-1}$ sera 0. De la, nous pouvons repartir de la pour trouver $J_{N-2}$. Donc:\\
+
+\begin{align*}
+J_{N-1} = x_N(2)\\
+J_{N-2} = x_{N-2}(3 + u_{N-2}(2\bar{w} -1))\\
+J_{N-3} = x_{N-3}(4 + u_{N-3}(3\bar{w} -1))...\\
+J_{N-k} = x_{N-k}(k+1 + u_{N-k}(k\bar{w} - 1))\\
+\&\\
+J_{N-N} = J_0 = x_0(N+1 + u_0(N\bar{w} - 1))\\
+\end{align*}
+On peut voir que tant que $(k\bar{w} - 1) < 0$, nous allons prendre comme décision $u_k = 0$ étant donné que le maximum de $J$ se trouve au point ou $u$ est minimale, soit 0 (sa limite inférieur). Évidemment, on peut voir aussi qu'avec $\bar{w} = \frac{1}{N}$, nous avons au point $J_0$: $(\frac{N}{N} - 1) = 0$, ce qui démontre qu'à la limite supérieur de notre plage pour $\bar{w}$ nous avons une décision indécise, tandis qu'avec n'importe quel valeur de $\bar{w} < \frac{1}{N}$, nous aurons $(k\bar{w} - 1) < 0, \forall k$.\\
+
+\subsection*{c)}
+Évidemment, pour cette question nous commençons avec une valeur de $\bar{w} \leq 1$, nous pouvons déjà voir que la valeur de $(\bar{w} - 1)$ sera inférieur ou égale à 0, ce qui implique que notre première décision sera presque assurément $u_{N-1} = 0$. Évidemment, on peut réutiliser notre formule développer en b) pour trouver la valeur de $k'$ qui rendra $(k'\bar{w} - 1) \geq 0 \rightarrow \bar{w} \geq \frac{1}{k'}$.\\
+
+Par contre, le système est discrèt. Alors nous ne pouvons pas simplement utiliser cette formule directement. Par contre, en discrétisant la formule, nous allons nécessairement avoir une valeur $\bar{k}$ dans lequel notre seuil se trouvera entre $\bar{k}$ et $\bar{k}+1$, ce qui nous ramène donc à la forme :\\
+
+$\frac{1}{\bar{k} + 1} < \bar{w} \leq \frac{1}{\bar{k}}$\\
+
+alors, pour les valeurs ou $0 \leq k \leq \bar{k}$, nous aurons $u_{N-k} = 0$, et pour les valeurs ou $N \geq k \geq \bar{k}+1$, nous aurons $u_{N-k} = 1$, ce qui correspond à l'énoncé. 
+ 
 \end{document}
