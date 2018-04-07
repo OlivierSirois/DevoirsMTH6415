@@ -152,7 +152,7 @@ Les décisions admissible à une étape k quelconque sont
 g(x_k, \mu_k, \Omega_k) =
 \begin{cases}
 x_k - kc &\text{si  } \mu_k = 1 \\
-0
+0 &\text{sinon}
 \end{cases}
 \end{gather*}
 
@@ -172,7 +172,7 @@ On peut remplacer la valeur de $x_{k+1}$ par $y_k$ dans la fonction $J_{k+1}$ pu
 Ainsi, nous pouvons déterminer que la décision optimale, si on a encore le choix est de vendre si et seulement si 
 
 \begin{gather*}
-x_k = \alpha_k \equiv E_{\Omega_k}\left[J_{k+1}(y_{k})\right] + kc
+x_k \geq \alpha_k \equiv E_{\Omega_k}\left[J_{k+1}(y_{k})\right] + kc
 \end{gather*}
 
 
