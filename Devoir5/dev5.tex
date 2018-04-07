@@ -1,0 +1,96 @@
+\documentclass[oneside]{book}
+\usepackage[utf8]{inputenc}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{color}
+\usepackage{multicol}
+\usepackage{ragged2e}
+\usepackage{listings}
+\usepackage{pdfpages}
+\title{Devoir 4 \\ MTH 6415}
+\date{2018-03-28}
+\author{Olivier Sirois - 1626107 \\ Corey Ducharme - 1626614}
+\setlength\parindent{0pt}
+\makeindex
+\pagenumbering{arabic}
+\begin{document}
+\setcounter{page}{1}
+\maketitle
+\section*{4.22 (3.22 ed. 4)}
+On peut voir ce problème comme un problème de temps d'arrêt
+optimal. Ce problème est similaire à celui du voleur qui sait
+compter. Définisson donc le problème de cette manière.
+
+Soit $x_k$ notre variable d'état représentant l'argent cumulé jusqu'à
+l'état k.  Le but de l'extorqueur est de maximiser son profit espéré
+sur les N étapes. Soit,
+
+\begin{align*}
+  max(E[x_N])
+\end{align*}
+
+Les décisions possibles à chaque étape \textit{k} pour notre
+extorqueur est de continuer son extorsion en demandant un montant
+d'argent $u_k$ ou de s'arrêter et recevoir un montant \textit{R}. De
+plus, s'il demande de l'argent, il peut soit la recevoir avec un
+probabilité $(1-u_k)$ ou il peut se faire raporter à la police avec
+une probabilité $u_k$. Nous exprimons, ces différents états de la
+décisions comme ceci :
+
+\begin{align*}
+  U = [0, 1] \cup {\Delta}
+\end{align*}
+
+où $\Delta$ représente l'état où l'extorqueur ne peu plus faire de
+l'extorsion soit parce qu'il à décider d'arrêter ou parce qu'il s'est
+fait reporter à la police.
+
+Nous écrivons maintenant les équations de Bellmann du problème.
+
+\begin{gather*}
+  J_N(x_N) = x_N \\
+  J_k(x_k) = \max_{u \in U(x_k)}(x_k + R, (1-u_k)E[J_{k+1}(x_k+u_k)] + u_kx_k)
+\end{gather*}
+
+Nous remarquons que notre problème peut être vue comme un problème
+d'un coup à l'avance. L'état du un coup à l'avance peut donc être
+écrit comme :
+
+\begin{align*}
+  T_{N-1} &= \{x \mid x + R \geq (1-u)(x+u) + ux\} \\
+  &= \{x \mid R \geq (1-u)(x+u) + ux - x\} \\
+  &= \{x \mid R \geq u(1-u)\}
+\end{align*}
+
+Nous déterminons la valeur maximale de $u(1-u)$ dans cette situation comme étant $u = 0.5$. Ainsi nous obtenons
+
+\begin{align*}
+  T_{N-1} = \left\{ x \mid R \geq \frac{1}{4} \right\}
+\end{align*}
+
+Donc, nous pouvons conclure que la décision optimale de l'extorqueur est indépendante du montant $x_k$. Sa décision optimale est se retirer si le montant $R$ est supérieur à $\frac{1}{4}$ ou de continuer à extorquer de l'argent jusqu'à ce qu'il se fasse reporter à la police. 
+
+\section{4.23 (3.23 ed. 4)}
+Nous remarquons que ce problème a une politique optimale en boucle ouverte. En effet, le problème est stochastique, mais l'information obtenue au cours des premières étapes n'est pas utile pour améliorer les décisions futures. Ainsi, nous pouvons chercher un ordonnacement optimale pour ce problème en utilisant l'argument d'échange des voisins.
+
+Soit $L$ un ordonnacement optimales des N décisions de Theseus et $L'$ une permutation de cette ordonnacement.
+
+\begin{gather*}
+  L = (i_0,\ldots, i_{k-1},i,j,i_{k+2},\ldots, i_{N-1}) \\
+  L' = (i_0,\ldots, i_{k-1},j,i,i_{k+2},\ldots, i_{N-1})
+\end{gather*}
+
+Soit $J(x)$, la probabilité que Theseus s'échappe suivant un ordonnacement $x$. Dans ce problème, nous remarquons qu'à chaque tour la probabilité de réussite est $p_k$, la probabilité d'échec est de $q_k$. Donc, la probabilité de pouvoir se réesseyer au tour $k+1$ est de $(1-p_k-q_k)$. Ainsi, nous pouvons écrire les équations pour $J(L)$ et $J(L')$.
+
+\begin{align*}
+  J(L) =&\geq p_j + (1-p_j-q_j)p_i \\
+  -q_ip_j &\geq -q_jp_i \\
+  q_jp_i &\geq q_ip_j \\
+  \frac{p_i}{q_i} &\geq \frac{p_j}{q_j}
+\end{align*}
+
+Donc, la politique optimale de Theseus est de choisir les passages selon l'ordre décroissant des ratios $p_i/q_i$.
+
+
+\end{document}
