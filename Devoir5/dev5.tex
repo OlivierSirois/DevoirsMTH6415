@@ -92,5 +92,43 @@ Soit $J(x)$, la probabilité que Theseus s'échappe suivant un ordonnacement $x$
 
 Donc, la politique optimale de Theseus est de choisir les passages selon l'ordre décroissant des ratios $p_i/q_i$.
 
+\section{p.450 \# 16}
+\subsection*{a)}
+Pour ce problème, on nous demande de prouver que la politique du problème est sous la forme :\\
+
+\begin{itemize}
+\item si $i > i*$, on répare\\
+\item sinon, on continue.
+\end{itemize}
+
+Il n'y a pas beaucoup d'information donnés dans l'énoncé.. seulement que:\\
+\begin{itemize}
+\item $g(1) \leq g(2) \leq g(3) \leq g(4) ... g(n)$
+\item deux seule transition sont possible: $i'= 0, i'= i+1$ avec $0 < p < 1$
+\end{itemize}
+
+Évidemment, on peut déduire certaines charactéristique de nos fonctions $J$. Premièrement, le problème est un problème de 'discout' ou $\alpha < 1$. Cela implique, selon les propositions 5.4.1 du livre de Bertsekas que la fonctions $J_k$ aura la forme suivante:\\
+
+$J_{k+1} = min_u[g(i,u) + \alpha \sum\limits_{j=1}^{n}p_{ij}(u)J_k(j)$\\
+
+Par contre, nous avons déjà établie que les seules transitions possible était qu'on reste au même endroit ou qu'on incrémente la valeur de i. On peut traduire cela:\\
+
+$J_{k+1} = min_u[g(i,u) + \alpha (p*J_{k+1} + (1-p)*J_k)]$\\
+
+On peut facilement voir que la fonction $J_i$ est strictement croissante selon i. Étant donné que la fonction est strictement croissante, il arrivera un point $i*$ ou les valeurs :\\
+
+$R + J_0 < g(i*,u) + \alpha (p*J({i+1} + (1-p)*J_{k}$\\
+
+C'est à ce point i ou la décision sera de réparer la machine et de mettre i à 0. Évidemment, étant donné que la fonction J est strictement croissante, la décision restera la même jusqu'à temps qu'on répare la machine.
+
+\subsection*{b)}
+Pour cette question, on peut utiliser l'algorithm d'itération de politique pour trouver une politique optimale pour le problème. Comme mentionner dans l'énoncé et dans a), la politique prendre forme:\\
+
+\begin{itemize}
+\item si $i > i*$, on répare,\\
+\item sinon on continue.
+\end{itemize}
+
+Évidemment, notre algorithme va évaluer la performance de cette politique selon la seuil. Cela peut être fait analytiquement et en simulation dépendamment des valeurs de g() et de p. Notre algorithme va essayer toutes les valeurs de seuils possible entre $\{0,1,2...n\}$ et va conserver la politique ayant la meilleur performance.
 
 \end{document}
